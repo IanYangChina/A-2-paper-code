@@ -1,14 +1,14 @@
-###TA2: Task Decomposition, Abstract Demonstrations and Adaptive Exploration for Multi-step Sparse Reward Reinforcement Learning
+### TA2: Task Decomposition, Abstract Demonstrations and Adaptive Exploration for Multi-step Sparse Reward Reinforcement Learning
 
-####This is the official repository for the codes of the TA2 paper.
+#### This is the official repository for the codes of the TA2 paper.
 
-#####Paper link:
+##### Paper link:
 
-#####Video:
+##### Video:
 
-#####Contact: [yangx66@cardiff.ac.uk](yangx66@cardiff.ac.uk)
+##### Contact: [yangx66@cardiff.ac.uk](yangx66@cardiff.ac.uk)
 
-####Installation
+#### Installation
 
 - Ubuntu 16.04 or Windows 10
 - Clone and enter the repository, install requirements
@@ -19,7 +19,7 @@
 - Install [Pybullet-multigoal-gym](https://github.com/IanYangChina/pybullet_multigoal_gym)
 - Install [DRL_Implementation](https://github.com/IanYangChina/DRL_Implementation)
 
-####Train
+#### Train
 
 To train your own agent from a **Linux** terminal:
 - Optionally `conda activate YourCondaEnvironment`
@@ -58,8 +58,8 @@ optional arguments:
                         means exact estimate instead of polyak), default: 0.3
 ```
 
-####Evaluation
+#### Evaluation
 
-####Citation
+#### Citation
 
-####Acknowledgement
+#### Acknowledgement
