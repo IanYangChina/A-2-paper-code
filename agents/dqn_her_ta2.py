@@ -12,7 +12,7 @@ from agents.adaptive_exploration import ExpDecayEpsilonGreedy, AdaptiveEpsilonGr
 
 
 class DqnHerTA2(Agent):
-    def __init__(self, algo_params, env, transition_tuple=None, path=None, seed=-1):
+    def __init__(self, algo_params, env, transition_tuple=None, path=None, seed=33):
         # environment
         self.env = env
         self.env.seed(seed)
@@ -85,8 +85,8 @@ class DqnHerTA2(Agent):
             test_return = 0
             test_success = 0
             test_sub_goal_success = np.zeros(self.env.num_steps)
-            for goal_ind in self.env.step_demonstrator.demonstrations[0]:
-                for test_ep in range(self.testing_episodes):
+            for test_ep in range(self.testing_episodes):
+                for goal_ind in self.env.step_demonstrator.demonstrations[-1]:
                     ep_test_return = self._interact(render, goal_ind=goal_ind, test=True, sleep=sleep)
                     test_return += ep_test_return
                     if ep_test_return > -self.env._max_episode_steps:
@@ -251,7 +251,12 @@ class DqnHerTA2(Agent):
 
     def _select_action(self, obs, goal_ind=-1, test=False):
         inputs = np.concatenate((obs['observation'], obs['desired_goal']), axis=0)
-        if self.adaptive_exploration:
+        if test:
+            with T.no_grad():
+                inputs = T.as_tensor(inputs, dtype=T.float, device=self.device)
+                values = self.network_dict['q_target'](inputs).cpu().detach()
+                action = T.argmax(values).item()
+        elif self.adaptive_exploration:
             if self.exploration_strategy(goal_ind):
                 action = self.env.action_space.sample()
             else:

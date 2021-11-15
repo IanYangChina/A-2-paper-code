@@ -13,7 +13,7 @@ from collections import namedtuple
 
 
 class SacHerTA2(Agent):
-    def __init__(self, algo_params, env, transition_tuple=None, path=None, seed=-1):
+    def __init__(self, algo_params, env, transition_tuple=None, path=None, seed=20):
         # environment
         self.env = env
         self.env.seed(seed)

@@ -26,8 +26,8 @@ To train your own agent from a **Linux** terminal:
 - `python train.py --task gridworld_15 --agent dqn --render --num-seeds 2 --TA2 --eta 0.75 --tau 0.3`
 - This command means you will train a DQN agent on a gridworld task of size 15x15, 
 with 75% demonstrated episodes and 0.3 adaptive exploration update speed 
-for 2 random seeds in rendering mode
-- The `--TA` and `--TA2` flags should not be used at the same time
+for 2 random seeds in rendering mode.
+- The `--TA` and `--TA2` flags should not be used at the same time.
 
 To see full argument explanation: `python train.py -h`, which gives:
 ```
@@ -58,8 +58,34 @@ optional arguments:
                         means exact estimate instead of polyak), default: 0.3
 ```
 
-#### Evaluation
+#### Test a pretrained agent
 
+To evaluate a pretrained agent from a **Linux** terminal:
+- `python test.py --task gridworld_15 --agent dqn --render --TA2`
+- This command means a DQN agent pretrained using TA2 on the gridworld 15x15 task 
+will be evaluated in rendering mode.
+- Each of the subgoals will be evaluated for 30 episodes.
+- The `--TA` and `--TA2` flags should not be used at the same time.
+
+To see full argument explanation: `python test.py -h`, which gives:
+```
+usage: test.py [-h]
+               [--task {gridworld_15,gridworld_25,block_stack,chest_push,chest_pick_and_place}]
+               [--agent {dqn,sac,ddpg}] [--render] [--TA] [--TA2]
+
+optional arguments:
+  -h, --help            show this help message and exit
+  --task {gridworld_15,gridworld_25,block_stack,chest_push,chest_pick_and_place}
+                        Name of the task, default: gridworld_15
+  --agent {dqn,sac,ddpg}
+                        Name of the agent, default: dqn
+  --render              Whether to render the task, default: False
+  --TA                  Whether to use task decomposition & abstract
+                        demonstrations, default: False
+  --TA2                 Whether to use task decomposition, abstract
+                        demonstrations & adaptive exploration, default: False
+
+```
 #### Citation
 
 #### Acknowledgement

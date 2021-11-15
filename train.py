@@ -1,6 +1,7 @@
 import os
 import argparse
 import agents.plot as plot
+import matplotlib as mpl
 import pybullet_multigoal_gym as pmg
 from config_params import *
 from agents.dqn_her_ta2 import DqnHerTA2
@@ -48,14 +49,14 @@ if __name__ == '__main__':
         manipulation_params['task'] = args['task']
 
         if manipulation_params['task'] == 'chest_pick_and_place':
-            agent_params['training_epochs'] = 31
-            agent_params['saving_gap'] = 30
+            agent_params['training_epochs'] = 51
+            agent_params['saving_gap'] = 50
             manipulation_params['distance_threshold'] = 0.03
             manipulation_params['num_block'] = 1
 
         elif manipulation_params['task'] == 'chest_push':
-            agent_params['training_epochs'] = 51
-            agent_params['saving_gap'] = 50
+            agent_params['training_epochs'] = 31
+            agent_params['saving_gap'] = 30
             manipulation_params['distance_threshold'] = 0.05
             manipulation_params['num_block'] = 1
 
@@ -64,16 +65,8 @@ if __name__ == '__main__':
             agent_params['saving_gap'] = 50
             manipulation_params['distance_threshold'] = 0.03
             manipulation_params['num_block'] = 2
-
-    path = os.path.join(os.path.dirname(os.path.realpath(__file__)),
-                        'result',
-                        args['task']+'_'+args['agent'])
-
-    # dqn and sac should work for all seeds
-    # while ddpg is expected to learn nothing for some of the seeds
-    seeds = [11, 22, 33, 44, 55, 66, 77, 88, 99, 111]
-    seed_returns = []
-    seed_success_rates = []
+        else:
+            raise ValueError("something goes wrong")
 
     # setup ta2 params
     if args['ta']:
@@ -82,22 +75,42 @@ if __name__ == '__main__':
         agent_params['abstract_demonstration'] = True
         agent_params['abstract_demonstration_eta'] = args['eta']
         agent_params['adaptive_exploration'] = False
-    if args['ta2']:
-        assert not args['ta'], 'please pass only the --TA or the --TA2 flag to the script'
+        case_dir = 'ta_' + str(args['eta']) + 'eta'
+    elif args['ta2']:
         manipulation_params['task_decomposition'] = True
         agent_params['abstract_demonstration'] = True
         agent_params['abstract_demonstration_eta'] = args['eta']
         agent_params['adaptive_exploration'] = True
         agent_params['adaptive_exploration_tau'] = args['tau']
+        case_dir = 'ta2_' + str(args['eta']) + 'eta_' + str(args['tau']) + 'tau'
+    else:
+        manipulation_params['task_decomposition'] = False
+        agent_params['abstract_demonstration'] = False
+        agent_params['adaptive_exploration'] = False
+        case_dir = 'vanilla'
+
+    path = os.path.join(os.path.dirname(os.path.realpath(__file__)),
+                        'result',
+                        args['task']+'_'+args['agent'],
+                        case_dir)
+
+    # dqn and sac should work for all seeds
+    # while ddpg is expected to learn nothing for some of the seeds
+    seeds = [11, 22, 33, 44, 55, 66, 77, 88, 99, 111]
+    seed_returns = []
+    seed_success_rates = []
 
     for i in range(args['num_seeds']):
 
         if 'gridworld' in args['task']:
+            if args['render']:
+                mpl.use('TkAgg')
             env = make_grid_world(size=gridworld_params['size'],
                                   max_episode_steps=gridworld_params['max_episode_steps'])
         else:
             env = pmg.make_env(task=manipulation_params['task'],
                                gripper=manipulation_params['gripper'],
+                               grip_informed_goal=True,
                                num_block=manipulation_params['num_block'],
                                distance_threshold=manipulation_params['distance_threshold'],
                                max_episode_steps=manipulation_params['max_episode_steps'],
