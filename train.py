@@ -15,8 +15,6 @@ parser.add_argument('--task', dest='task', type=str,
                                                      'block_stack', 'chest_push', 'chest_pick_and_place'])
 parser.add_argument('--agent', dest='agent', type=str,
                     help='Name of the agent, default: dqn', default='dqn', choices=['dqn', 'sac', 'ddpg'])
-parser.add_argument('--train', dest='train',
-                    help='Whether to train or evaluate, default: False', default=False, action='store_true')
 parser.add_argument('--render', dest='render',
                     help='Whether to render the task, default: False', default=False, action='store_true')
 parser.add_argument('--num-seeds', dest='num_seeds',
@@ -45,7 +43,6 @@ if __name__ == '__main__':
         gridworld_params['size'] = int(args['task'][-2:])
         agent_params['training_epochs'] = 51
         agent_params['saving_gap'] = 50
-        path = os.path.join(os.path.dirname(os.path.realpath(__file__)), 'result', 'gridworld')
     else:
         assert args['agent'] != 'dqn', "Please use SAC or DDPG for the manipulation tasks"
         manipulation_params['task'] = args['task']
@@ -68,9 +65,9 @@ if __name__ == '__main__':
             manipulation_params['distance_threshold'] = 0.03
             manipulation_params['num_block'] = 2
 
-        path = os.path.join(os.path.dirname(os.path.realpath(__file__)),
-                            'result',
-                            manipulation_params['task']+'_'+args['agent'])
+    path = os.path.join(os.path.dirname(os.path.realpath(__file__)),
+                        'result',
+                        args['task']+'_'+args['agent'])
 
     # dqn and sac should work for all seeds
     # while ddpg is expected to learn nothing for some of the seeds
@@ -80,11 +77,13 @@ if __name__ == '__main__':
 
     # setup ta2 params
     if args['ta']:
+        assert not args['ta2'], 'please pass only the --TA or the --TA2 flag to the script'
         manipulation_params['task_decomposition'] = True
         agent_params['abstract_demonstration'] = True
         agent_params['abstract_demonstration_eta'] = args['eta']
         agent_params['adaptive_exploration'] = False
     if args['ta2']:
+        assert not args['ta'], 'please pass only the --TA or the --TA2 flag to the script'
         manipulation_params['task_decomposition'] = True
         agent_params['abstract_demonstration'] = True
         agent_params['abstract_demonstration_eta'] = args['eta']
