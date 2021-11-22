@@ -11,7 +11,7 @@ import matplotlib as mpl
 parser = argparse.ArgumentParser()
 parser.add_argument('--task', dest='task', type=str,
                     help='Name of the task, default: gridworld_15',
-                    default='gridworld_25', choices=['gridworld_15', 'gridworld_25',
+                    default='gridworld_25', choices=['gridworld_15', 'gridworld_25', 'gridworld_35',
                                                      'block_stack', 'chest_push', 'chest_pick_and_place'])
 parser.add_argument('--agent', dest='agent', type=str,
                     help='Name of the agent, default: dqn', default='dqn', choices=['dqn', 'sac', 'ddpg'])
@@ -35,7 +35,17 @@ if __name__ == '__main__':
         if args['render']:
             mpl.use('TkAgg')
         gridworld_params['size'] = int(args['task'][-2:])
-        load_network_ep = 50
+        if gridworld_params['size'] == 15:
+            gridworld_params['max_episode_steps'] = 40
+            load_network_ep = 30
+        elif gridworld_params['size'] == 25:
+            gridworld_params['max_episode_steps'] = 50
+            load_network_ep = 50
+        elif gridworld_params['size'] == 35:
+            gridworld_params['max_episode_steps'] = 70
+            load_network_ep = 70
+        else:
+            raise ValueError("There are only three sizes: 15, 25, 35.")
     else:
         assert args['agent'] != 'dqn', "Please use SAC or DDPG for the manipulation tasks"
         manipulation_params['task'] = args['task']
@@ -56,7 +66,7 @@ if __name__ == '__main__':
             manipulation_params['num_block'] = 2
         else:
             raise ValueError("Please make sure the task is in "
-                             "['gridworld_15', 'gridworld_25', 'block_stack', 'chest_push', 'chest_pick_and_place'],"
+                             "['gridworld_15', 'gridworld_25', 'gridworld_35', 'block_stack', 'chest_push', 'chest_pick_and_place'],"
                              "not {}.".format(manipulation_params['task']))
 
     # setup ta2 params

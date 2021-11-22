@@ -42,8 +42,21 @@ if __name__ == '__main__':
     if 'gridworld' in args['task']:
         assert args['agent'] == 'dqn', "Please use DQN for the gridworld tasks"
         gridworld_params['size'] = int(args['task'][-2:])
-        agent_params['training_epochs'] = 51
-        agent_params['saving_gap'] = 50
+
+        if gridworld_params['size'] == 15:
+            gridworld_params['max_episode_steps'] = 40
+            agent_params['training_epochs'] = 31
+            agent_params['saving_gap'] = 30
+
+        elif gridworld_params['size'] == 25:
+            gridworld_params['max_episode_steps'] = 50
+            agent_params['training_epochs'] = 51
+            agent_params['saving_gap'] = 50
+
+        elif gridworld_params['size'] == 35:
+            gridworld_params['max_episode_steps'] = 70
+            agent_params['training_epochs'] = 71
+            agent_params['saving_gap'] = 70
     else:
         assert args['agent'] != 'dqn', "Please use SAC or DDPG for the manipulation tasks"
         manipulation_params['task'] = args['task']
