@@ -1,6 +1,6 @@
 ### Abstract Demonstrations and Adaptive Exploration for Efficient and Stable Multi-step Sparse Reward Reinforcement Learning
 
-#### This is the official repository for the codes of the TA2 paper.
+#### This is the official repository for the codes of the A^2 paper.
 
 ##### Paper link:
 
