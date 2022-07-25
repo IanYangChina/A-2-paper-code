@@ -2,7 +2,7 @@
 
 #### This is the official repository for the codes of the A^2 paper.
 
-##### Paper link:
+##### Paper link: https://arxiv.org/abs/2207.09243
 
 ##### Video:
 
