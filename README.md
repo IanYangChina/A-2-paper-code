@@ -4,8 +4,6 @@
 
 ##### Paper link: https://arxiv.org/abs/2207.09243
 
-##### Video:
-
 ##### Contact: [yangx66@cardiff.ac.uk](yangx66@cardiff.ac.uk)
 
 #### Installation
